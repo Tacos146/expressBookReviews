@@ -37,6 +37,6 @@ app.use('/customer', customer_routes)
 app.use('/', genl_routes)
 
 const PORT = process.env.PORT || 5000
-app.listen(PORT, () =>
+app.listen(PORT, function(){
   console.log(`Server is running in http://localhost:${PORT}/`)
-)
+})

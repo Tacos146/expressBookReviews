@@ -4,7 +4,7 @@ const express = require('express')
 
 const public_users = express.Router()
 
-public_users.post('/register', (req, res) => {
+public_users.post('/register', function(req, res){
   const { username, password } = req.body
 
   if (!username || !password) {
@@ -19,22 +19,27 @@ public_users.post('/register', (req, res) => {
 })
 
 public_users.get('/', function (req, res) {
-  new Promise((resolve, reject) => {
+  new Promise(function(resolve, reject) {
     resolve(JSON.stringify(books))
-  })
-    .then((data) => {
+  }//function(a,b){}end()
+)//Promise(function)end
+    .then(function(data) {
       return res.status(200).json({ data })
-    })
-    .catch((error) => {
+    }//function(data){}end
+)//then(function)end
+    .catch(function(error) {
       return res.status(400).json({ message: error })
-    })
-})
+    }//function(error){}end
+)//catch(function)end
+}//function(req,res)end
+)//get()end
 
 public_users.get('/', async function (req, res) {
   try {
-    const data = await new Promise((resolve, reject) => {
+    const data = await new Promise(function(resolve, reject){
       resolve(JSON.stringify(books))
-    })
+    }//function(resolve,reject){}end
+)//Promise()end
     return res.status(200).json({ data })
   } catch (error) {
     return res.status(400).json({ message: error })
@@ -42,7 +47,7 @@ public_users.get('/', async function (req, res) {
 })
 
 public_users.get('/isbn/:isbn', function (req, res) {
-  new Promise((resolve, reject) => {
+  new Promise(function(resolve, reject){
     const isbn = req.params.isbn
     const book = books[isbn]
     if (!book) {
@@ -50,20 +55,22 @@ public_users.get('/isbn/:isbn', function (req, res) {
     } else {
       resolve(book)
     }
-  })
-    .then((data) => {
+  }//function(resolve,reject)end
+)//Promimse()end
+    .then(function(data){
       res.status(200).json(data)
-    })
-    .catch((error) => {
+    }//function(data)end
+)//then()end
+    .catch(function(error){
       res.status(404).json({ message: error })
     })
 })
 
 public_users.get('/author/:author', function (req, res) {
-  new Promise((resolve, reject) => {
+  new Promise(function(resolve, reject){
     const author = req.params.author
     const booksByAuthor = Object.values(books).filter(
-      (b) => b.author === author
+      function(b){b.author === author}
     )
     if (booksByAuthor.length === 0) {
       reject('No books found for this author')
@@ -71,30 +78,31 @@ public_users.get('/author/:author', function (req, res) {
       resolve(booksByAuthor)
     }
   })
-    .then((data) => {
+    .then(function(data) {
       res.status(200).json(data)
     })
-    .catch((error) => {
+    .catch(function(error){
       res.status(404).json({ message: error })
     })
 })
 
 public_users.get('/title/:title', function (req, res) {
-  new Promise((resolve, reject) => {
+  new Promise(function(resolve, reject){
     const title = req.params.title
-    const booksByTitle = Object.values(books).filter((b) =>
+    const booksByTitle = Object.values(books).filter(function(b){
       b.title.includes(title)
-    )
+    }//function(b)end
+    )//filter()end
     if (booksByTitle.length === 0) {
       reject('No books found with this title')
     } else {
       resolve(booksByTitle)
     }
   })
-    .then((data) => {
+    .then(function(data){
       res.status(200).json(data)
     })
-    .catch((error) => {
+    .catch(function(error){
       res.status(404).json({ message: error })
     })
 })

@@ -1,22 +1,23 @@
 const books = require('./booksdb.js')
 const jwt = require('jsonwebtoken')
 const express = require('express')
-
 const regd_users = express.Router()
-
-const users = []
 const SECRET_KEY = 'fingerprint_customer'
+const users = []
 
-const isValid = (username) => {
-  return users.some((users) => users.username === username)
-}
+const isValid = function(username) {
+  return users.some(function(user) {
+    return user.username === username;
+  }//function(user){}end)
+);//some()end
+};//function(username){}end
 
-const authenticatedUser = (username, password) => {
-  const user = users.find((users) => users.username === username)
+const authenticatedUser = function(username, password){
+  const user = users.find(function(users) {users.username === username})
   return user && user.password === password
 }
 
-regd_users.post('/login', (req, res) => {
+regd_users.post('/login', function(req, res){
   const { username, password } = req.body
 
   if (!isValid(username) || !authenticatedUser(username, password)) {
@@ -24,19 +25,20 @@ regd_users.post('/login', (req, res) => {
   }
 
   const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '1h' })
-  users.find((u) => u.username === username).token = token
+  users.find(function(u){u.username === username}).token = token
   console.log(users)
   return res.status(200).json({ token })
-})
+}//function(req,res){}end
+);//post()end
 
-regd_users.put('/auth/review/:isbn', (req, res) => {
+regd_users.put('/auth/review/:isbn', function(req, res){
   const isbn = req.params.isbn
   const review = req.body.review
   const token = req.header('Authorization').replace('Bearer ', '')
 
   try {
     const decoded = jwt.verify(token, SECRET_KEY)
-    const user = users.find((user) => user.username === decoded.username)
+    const user = users.find(function(user){user.username === decoded.username})
 
     if (!books[isbn]) {
       return res.status(404).json({ message: 'Book not found' })
@@ -48,7 +50,7 @@ regd_users.put('/auth/review/:isbn', (req, res) => {
 
     const reviewsBooks = books[isbn].reviews
     const reviewUser = Object.keys(reviewsBooks).find(
-      (r) => r.username === user
+      function(r){r.username === user}
     )
 
     if (reviewUser) {
@@ -60,9 +62,10 @@ regd_users.put('/auth/review/:isbn', (req, res) => {
   } catch (error) {
     res.status(400).send('Invalid token')
   }
-})
+}//function(req,res){}end
+)//put()end
 
-regd_users.delete('/auth/review/:isbn', (req, res) => {
+regd_users.delete('/auth/review/:isbn', function(req, res){
   const isbn = req.params.isbn
   const token = req.headers.authorization.split(' ')[1]
 
@@ -78,7 +81,7 @@ regd_users.delete('/auth/review/:isbn', (req, res) => {
     }
 
     books[isbn].reviews = Object.keys(books[isbn].reviews).find(
-      (r) => r.username !== username
+      function(r){r.username !== username}
     )
     return res.status(200).json({ message: 'Your review was deleted' })
   } catch (error) {
