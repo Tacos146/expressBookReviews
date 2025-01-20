@@ -11,12 +11,11 @@ public_users.post('/register', function (req, res) {
     if (!username || !password) { //if username or password does not exist
         return res.status(400).json({ message: 'Invalid username or password' })
     }
-    if (users.includes(username)) { //if users which is an array[] contains imputted name
+    if (users.some(function a(b){return b.username === username})) { //if users which is an array[] contains imputted name
         return res.status(400).json({ message: 'User already exists' })
     } else {
-        users.push({ username, password })
-        console.log(users)
-        console.log(users.includes(username))
+        //users.push({username, password}) both are ok
+        users.push({ "username": username, "password":password })
         return res.status(200).json({ message: 'New user was registered' })
     }
 })
@@ -62,7 +61,7 @@ public_users.get('/author/:author', function (req, res) {
         let result = [];
         for (let isbn in books) {
             if (books[isbn].author === author) {
-                result.push({ isbn, ...books[isbn] });
+                result.push({isbn, ...books[isbn] });
             }
         }//for end
         if (result != 0) {
