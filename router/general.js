@@ -5,15 +5,18 @@ const express = require('express')
 const public_users = express.Router()
 
 public_users.post('/register', function (req, res) {
-    const { username, password } = req.body
+    const username = req.body.username
+    const password = req.body.password
 
-    if (!username || !password) {
+    if (!username || !password) { //if username or password does not exist
         return res.status(400).json({ message: 'Invalid username or password' })
     }
-    if (users.includes(username)) {
+    if (users.includes(username)) { //if users which is an array[] contains imputted name
         return res.status(400).json({ message: 'User already exists' })
     } else {
         users.push({ username, password })
+        console.log(users)
+        console.log(users.includes(username))
         return res.status(200).json({ message: 'New user was registered' })
     }
 })
