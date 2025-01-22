@@ -10,7 +10,7 @@ app.use(express.json())
 app.use(
   '/customer',
   session({
-    secret: 'fingerprint_customer', 
+    secret: 'hogehoge_is_sesssion_secret_key', 
     //not actual fingerprint data. it's just name of session key
     resave: true,
     saveUninitialized: true
@@ -22,11 +22,10 @@ app.use('/customer/auth/*', function auth(req, res, next) {
     const authHeader = req.header('Authorization');
     if (!authHeader) return res.status(401).send('Access Denied: No Authorization Header Provided!');
     const token = authHeader.replace('Bearer ', '');
-    
-  if (!token) return res.status(401).send('Access Denied: No Token Provided!')
+    if (!token) return res.status(401).send('Access Denied: No Token Provided!')
 
   try {
-    const verified = jwt.verify(token, 'fingerprint_customer')
+    const verified = jwt.verify(token, 'kitakita_is_jwt_secret_key')
     req.user = verified
     next()
   } catch (err) {

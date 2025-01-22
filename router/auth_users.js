@@ -2,23 +2,26 @@ const books = require('./booksdb.js')
 const jwt = require('jsonwebtoken')
 const express = require('express')
 const regd_users = express.Router()
-const SECRET_KEY = 'fingerprint_customer'
+const SECRET_KEY = 'kitakita_is_jwt_secret_key'
 const users = []
 
-const isValid = function(username) {
+const isValid = function a(username) {
   return users.some(function a(b) {
     return b.username === username;
   }//function(user){}end)
 );//some()end
 };//function(username){}end
 
-const authenticatedUser = function(username, password){
+const authenticatedUser = function a(username, password){
   const user = users.find(function a(b) {b.username === username})
   return user && user.password === password
 }
 
+
 regd_users.post('/login', function(req, res){
   const { username, password } = req.body
+
+  console.log(req.user)
 
   if (!isValid(username) || !authenticatedUser(username, password)) {
     return res.status(401).json({ message: 'Invalid username or password' })
