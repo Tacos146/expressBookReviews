@@ -10,7 +10,8 @@ app.use(express.json())
 app.use(
   '/customer',
   session({
-    secret: 'fingerprint_customer',
+    secret: 'fingerprint_customer', 
+    //not actual fingerprint data. it's just name of session key
     resave: true,
     saveUninitialized: true
   })
@@ -34,7 +35,10 @@ app.use('/customer/auth/*', function auth(req, res, next) {
 })
 
 app.use('/customer', customer_routes)
+//Line1 const customer_routes = require('./router/auth_users.js').authenticated
+
 app.use('/', genl_routes)
+//Line2 const genl_routes = require('./router/general.js').general
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, function(){
