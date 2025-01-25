@@ -27,7 +27,7 @@ regd_users.post('/login', function(req, res){
     return res.status(401).json({ message: 'Invalid username or password' })
   }
 
-  const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '1h' })
+  const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: 60 * 60 })
   users.find(function a(b){b.username === username}).token = token
   console.log(users)
   return res.status(200).json({ token })
@@ -68,9 +68,9 @@ regd_users.put('/auth/review/:isbn', function(req, res){
 }//function(req,res){}end
 )//put()end
 
-regd_users.delete('/auth/review/:isbn', function(req, res){
+regd_users.delete('/auth/review/:isbn', function a(req, res){
   const isbn = req.params.isbn
-  const token = req.headers.authorization.split(' ')[1]
+  const token = req.header('Authorization').replace('Bearer ', '')
 
   try {
     const decoded = jwt.verify(token, SECRET_KEY)
